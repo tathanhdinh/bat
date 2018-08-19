@@ -11,7 +11,12 @@ use syntect::parsing::{SyntaxDefinition, SyntaxSet};
 use std::os::unix::fs::FileTypeExt;
 
 lazy_static! {
-    static ref PROJECT_DIRS: ProjectDirs = ProjectDirs::from("", "", crate_name!());
+    static ref PROJECT_DIRS: ProjectDirs = {
+        let crate_name = crate_name!();
+        ProjectDirs::from("", "", crate_name).expect(&format!(
+            "Could not get configuration directory of '{}'", 
+            crate_name))
+    };
 }
 
 pub struct HighlightingAssets {
